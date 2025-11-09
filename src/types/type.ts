@@ -10,6 +10,5 @@ export interface TaskAttributes {
 }
 export interface Task {
   id: string;
-  
   attributes: TaskAttributes;
 }

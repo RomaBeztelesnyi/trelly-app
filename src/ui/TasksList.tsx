@@ -2,39 +2,21 @@ import { useEffect, useState } from "react";
 import ClearButton from "./Button";
 import type { Task } from "../types/type";
 import TaskItem from "./TaskItem";
+import { getTasks, type GlobalTaskListResponse } from "../dal/api";
+
 type Props = {
   selectedTaskId: string | null;
   setSelectedTaskId: (id: string | null) => void;
   setBoardId: (id: string | null) => void;
 };
 
-
-const color: string[] = ["#ffffff", "#ffd7b5", "#ffb38a", "#ff9248", "#ff6700"];
-
-const statusTask: Record<number, boolean> = {
-  0: true,
-  2: false,
-};
-
 function TasksList({ selectedTaskId, setSelectedTaskId, setBoardId }: Props) {
-  const [checkTask, setCheckTask] = useState<string | null>(null);
-   const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState<Task[]>([]);
 
-    useEffect(() => {
-    const fetchTasks = async () => {
+  useEffect(() : void => {
+    const fetchTasks = async () :Promise<void> => {
       try {
-        const response = await fetch(
-          "https://trelly.it-incubator.app/api/1.0/boards/tasks",
-          {
-            headers: {
-              "api-key": "a2d0a6ff-c816-4059-a6b7-b1def8bcdabd",
-            },
-          }
-        );
-        if (!response.ok) {
-          throw new Error(`Error! status: ${response.status}`);
-        }
-        const data = await response.json();
+        const data: GlobalTaskListResponse = await getTasks();
         setTasks(data.data);
       } catch (error) {
         console.error("error fetching tasks:", error);
@@ -44,10 +26,9 @@ function TasksList({ selectedTaskId, setSelectedTaskId, setBoardId }: Props) {
     fetchTasks();
   }, []);
 
-
-  function handleClick(id: string) {
-    setTasks((prevTasks) =>
-      prevTasks.map((task) =>
+  const handleToggleStatus = (id: string) : void => {
+    setTasks((prev) =>
+      prev.map((task) =>
         task.id === id
           ? {
               ...task,
@@ -59,8 +40,9 @@ function TasksList({ selectedTaskId, setSelectedTaskId, setBoardId }: Props) {
           : task
       )
     );
-  }
- const handleSelectTask = (id: string, boardId: string) => {
+  };
+
+  const handleSelectTask = (id: string, boardId: string) => {
     setSelectedTaskId(id);
     setBoardId(boardId);
   };
@@ -77,13 +59,12 @@ function TasksList({ selectedTaskId, setSelectedTaskId, setBoardId }: Props) {
         <ul className="flex flex-col gap-4 w-1xl">
           {tasks.map((task) => (
             <TaskItem
-            key={task.id}
-            task={task}
-            isSelected={task.id === selectedTaskId}
-            onSelect={handleSelectTask}
-            onToggleStatus={handleToggleStatus}
-          />
-
+              key={task.id}
+              task={task}
+              isSelected={task.id === selectedTaskId}
+              onSelect={handleSelectTask}
+              onToggleStatus={handleToggleStatus}
+            />
           ))}
         </ul>
       </div>

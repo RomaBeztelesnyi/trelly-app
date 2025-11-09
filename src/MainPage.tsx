@@ -1,6 +1,6 @@
 import { useState } from "react";
-import TasksList from "./components/TasksList";
-import TaskDetails from "./components/TaskDetails";
+import TasksList from "./ui/TasksList";
+import TaskDetails from "./ui/TaskDetails";
 
 export function MainPage() {
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);

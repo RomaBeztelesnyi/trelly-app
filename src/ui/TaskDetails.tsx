@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import type { Task } from "../types/type";
+import { getTask, type TaskDetailsData } from "../dal/api";
 type Props = {
   selectedTaskId: string | null;
   boardId: string | null;
@@ -16,17 +17,7 @@ function TaskDetails({ selectedTaskId, boardId }: Props) {
 
     const fetchTaskDetails = async () => {
       try {
-        const response = await fetch(
-          `https://trelly.it-incubator.app/api/1.0/boards/${boardId}/tasks/${selectedTaskId}`,
-
-          {
-            headers: { "api-key": "a2d0a6ff-c816-4059-a6b7-b1def8bcdabd" },
-          }
-        );
-        if (!response.ok) {
-          throw new Error(`Error! status: ${response.status}`);
-        }
-        const data = await response.json();
+        const data: TaskDetailsData = await getTask(selectedTaskId, boardId);
         setSelectedTask(data.data);
       } catch (error) {
         console.error("error fetching tasks:", error);

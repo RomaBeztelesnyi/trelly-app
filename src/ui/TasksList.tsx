@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
 import ClearButton from "./Button";
-import type { Task } from "../types/type";
 import TaskItem from "./TaskItem";
-import { getTasks, type GlobalTaskListResponse } from "../dal/api";
+import {useTasks} from '../bll/useTasks'
 
 type Props = {
   selectedTaskId: string | null;
@@ -11,20 +9,7 @@ type Props = {
 };
 
 function TasksList({ selectedTaskId, setSelectedTaskId, setBoardId }: Props) {
-  const [tasks, setTasks] = useState<Task[]>([]);
-
-  useEffect(() : void => {
-    const fetchTasks = async () :Promise<void> => {
-      try {
-        const data: GlobalTaskListResponse = await getTasks();
-        setTasks(data.data);
-      } catch (error) {
-        console.error("error fetching tasks:", error);
-      }
-    };
-
-    fetchTasks();
-  }, []);
+  const {tasks, setTasks} = useTasks()
 
   const handleToggleStatus = (id: string) : void => {
     setTasks((prev) =>

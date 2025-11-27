@@ -1,11 +1,9 @@
-import { useState } from "react";
 import TasksList from "./ui/TasksList";
 import TaskDetails from "./ui/TaskDetails";
+import { useTaskSelection } from "./bll/useTaskSelection";
 
 export function MainPage() {
-  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
-  const [boardId, setBoardId] = useState<string | null>(null);
-
+ const {selectedTaskId, setSelectedTaskId, boardId, setBoardId} = useTaskSelection()
   return (
     <div className="flex gap-8">
       <TasksList

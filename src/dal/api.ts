@@ -19,7 +19,7 @@ const prepareKey = () => {
 
 export const getTask = async (selectedTaskId: string, boardId: string) : Promise<TaskDetailsData> => {
   const response = await fetch(
-    'https://trelly.it-incubator.app/api/1.0/boards/${boardId}/tasks/${selectedTaskId}',
+    `https://trelly.it-incubator.app/api/1.0/boards/${boardId}/tasks/${selectedTaskId}`,
     {
       headers:prepareKey()
     }

@@ -9,11 +9,19 @@ export type TaskDetailsData = {
   data: Task;
 };
 
+const prepareKey = () => {
+  const apiKey = import.meta.env.VITE_APP_KEY
+  if (!apiKey) return undefined
+  return {
+    'api-key': apiKey
+  }
+}
+
 export const getTask = async (selectedTaskId: string, boardId: string) : Promise<TaskDetailsData> => {
   const response = await fetch(
-    `${import.meta.env.VITE_APP_API}/boards/${boardId}/tasks/${selectedTaskId}`,
+    'https://trelly.it-incubator.app/api/1.0/boards/${boardId}/tasks/${selectedTaskId}',
     {
-      headers: { "api-key": import.meta.env.VITE_APP_KEY },
+      headers:prepareKey()
     }
   );
   if (!response.ok) {
@@ -29,11 +37,9 @@ export const getTask = async (selectedTaskId: string, boardId: string) : Promise
 
 export const getTasks : () => Promise<GlobalTaskListResponse> = async(): Promise<GlobalTaskListResponse> => {
      const response = await fetch(
-          `${import.meta.env.VITE_APP_API}/boards/tasks`,
+          'https://trelly.it-incubator.app/api/1.0/boards/tasks',
           {
-            headers: {
-              "api-key": import.meta.env.VITE_APP_KEY,
-            },
+            headers:prepareKey()
           }
         );
         if (!response.ok) {
